@@ -9,6 +9,9 @@ import { processRow } from './logic';
 const parser = parse({
     fromLine: 2, // we skip the header
     skipEmptyLines: true,
+}).on('error', (e) => {
+    console.error(`Error parsing csv file: ${e}`);
+    process.exit(1);
 });
 
 const stringifier = stringify({
@@ -22,30 +25,44 @@ const stringifier = stringify({
         boolean: (value) => value ? 'true' : 'false', // format booleans as strings (default is 0,1)
     },
     quoted_match: /^\[.*\]$/, // always quote arrays as per spec
+}).on('error', (e) => {
+    console.error(`Error converting output to csv: ${e}`);
+    process.exit(1);
 });
 
 const transform = new Transform({
     readableObjectMode: true,
     writableObjectMode: true,
     async transform([id, jsonString]: unknown[], encoding, callback) {
-        if (typeof id !== 'string') {
-            throw new Error('No id in row');
-        }
-        if (typeof jsonString !== 'string') {
-            throw new Error('No values in row');
-        }
-        let json: unknown[];
         try {
-            json = JSON.parse(jsonString);
+            if (typeof id !== 'string') {
+                throw new Error('No id in row');
+            }
+            if (typeof jsonString !== 'string') {
+                throw new Error('No values in row');
+            }
+            let json: unknown;
+            try {
+                json = JSON.parse(jsonString);
+            } catch (e) {
+                throw new Error('Cannot parse values in row');
+            }
             if (!Array.isArray(json)) {
                 throw new Error('Parsed column is not an array');
             }
-        } catch (e) {
-            throw new Error('Cannot parse values in row');
+            this.push(processRow(id, json));
+            callback();
+        } catch (error) {
+            if (error instanceof Error) {
+                callback(error);
+            } else {
+                callback(new Error(`${error}`));
+            }
         }
-        this.push(processRow(id, json));
-        callback();
     }
+}).on('error', (e) => {
+    console.error(`Error transforming row: ${e}`);
+    process.exit(1);
 });
 
 async function main() {
@@ -60,8 +77,11 @@ async function main() {
         parser,
         transform,
         stringifier,
-        process.stdout,
+        process.stdout
     );
 }
 
-main().catch(console.error);
+main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+});

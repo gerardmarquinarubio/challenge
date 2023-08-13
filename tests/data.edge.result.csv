@@ -1,3 +1,7 @@
 id,json,is_valid
 4sizeMatrix,"[2,3,4,8,1,7,11,12,5,6,10,16,9,13,14,15]",true
 emptyArray,"[]",true
+,"[]",true
+boolean,"[true,true,false,false]",true
+nestedArray,"[2,3,[1],[2]]",true
+string,"[""world"",""bar"",""hello"",""foo""]",true

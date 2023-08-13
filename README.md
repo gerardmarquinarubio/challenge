@@ -2,7 +2,7 @@
 
 ## Usage
 
-Simply clone this repo and call `npm install && npm run build`, you can use the program with `npm start ./input_file.csv`.
+Simply clone this repo and call `npm install && npm run build`, you can use the program with `node dist/cli.js tests/data.original.csv`.
 
 ## Description of the program
 

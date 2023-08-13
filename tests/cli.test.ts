@@ -21,4 +21,9 @@ describe('cli integration test', () => {
         const compare = readFileSync('./tests/data.large.result.csv').toString();
         assert.deepEqual(child.stdout.toString(), compare);
     });
+
+    test('should crash with nonvalid data', () => {
+        const child = spawnSync('node', ['./dist/cli.js', './tests/data.error.csv']);
+        assert.notEqual(child.status, 0);
+    });
 });

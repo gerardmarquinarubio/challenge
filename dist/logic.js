@@ -1,5 +1,5 @@
-'use strict';
-Object.defineProperty(exports, '__esModule', { value: true });
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.processRow = void 0;
 function processRow(id, array) {
     const size = Math.sqrt(array.length);
