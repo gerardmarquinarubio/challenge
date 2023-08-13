@@ -4,6 +4,7 @@
   "description": "",
   "bin": "./dist/cli.js",
   "scripts": {
+    "lint": "eslint './src/*.ts' './tests/*.ts' --fix",
     "test": "ts-node ./tests/index.test.ts",
     "build": "tsc",
     "start": "node ./dist/cli.js"
