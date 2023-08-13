@@ -1,4 +1,4 @@
-export function processRow(id: string, array: number[]): [string, number[], boolean] {
+export function processRow<T = unknown>(id: string, array: T[]): [string, T[], boolean] {
     const size = Math.sqrt(array.length);
     if (Number.isInteger(size)) {
         const matrix = [];
@@ -12,7 +12,7 @@ export function processRow(id: string, array: number[]): [string, number[], bool
     }
 }
 
-function rotateMatrix(mat: number[][]): number[][] {
+function rotateMatrix<T = unknown>(mat: T[][]): T[][] {
     if (mat.length === 0 || mat.length === 1) {
         return mat;
     }

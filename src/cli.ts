@@ -34,9 +34,12 @@ const transform = new Transform({
         if (typeof jsonString !== 'string') {
             throw new Error('No values in row');
         }
-        let json: number[];
+        let json: unknown[];
         try {
             json = JSON.parse(jsonString);
+            if (!Array.isArray(json)) {
+                throw new Error('Parsed column is not an array');
+            }
         } catch (e) {
             throw new Error('Cannot parse values in row');
         }

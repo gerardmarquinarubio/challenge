@@ -46,6 +46,9 @@ const transform = new node_stream_1.Transform({
             let json;
             try {
                 json = JSON.parse(jsonString);
+                if (!Array.isArray(json)) {
+                    throw new Error('Parsed column is not an array');
+                }
             }
             catch (e) {
                 throw new Error('Cannot parse values in row');
